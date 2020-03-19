@@ -7,7 +7,7 @@ type PetProps = {
 
 }
 
-type PetState = {
+interface PetState {
     name: string,
     type: string, 
     breed: string, 

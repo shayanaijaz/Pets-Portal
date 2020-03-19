@@ -12,20 +12,11 @@ export const getBreed = async (type: string) => {
 
     try {
 
-        if (type === "dog") {
-            response = await axios.get('https://api.thedogapi.com/v1/breeds', {
-                headers: {
-                    'x-api-key': '2c9a0380-19a8-4907-8662-b2eb68823c3f'
-                }
-            })  
-        }
-        else if (type === "cat") {
-            response = await axios.get('https://api.thecatapi.com/v1/breeds', {
-                headers: {
-                    'x-api-key': 'ccf0aa15-1f15-4c9f-91a6-9cf4d4549089'
-                }
-            }) 
-        }
+        response = await axios.get('https://pets-api.herokuapp.com/petsBreed', {
+            params: {
+                type: type
+            }
+        })
 
         let breeds: [{
             value: String | null, 
@@ -33,7 +24,6 @@ export const getBreed = async (type: string) => {
         }] = [{value: null, label: null}]
 
         // let breeds: breedList[] = [];
-
         response.data.forEach(function(item: any) {
             breeds.push({value: item.name, label: item.name});
         })
@@ -67,4 +57,30 @@ export const postPetData = async (params: {name: string, type: string, breed: st
     }
 
 
+}
+
+export const getPetData = async () => {
+    let response: any = [];
+
+    try {
+        response = await axios.get("https://pets-api.herokuapp.com/pets");
+        
+        console.log(response.data)
+
+        return response.data;
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const getPetDataByID = async (ID: number) => {
+    let response: any = [];
+
+    try {
+        response = await axios.get(`https://pets-api.herokuapp.com/pets/${ID}`);
+        console.log(response.data)
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
 }

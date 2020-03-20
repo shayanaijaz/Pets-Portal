@@ -33,10 +33,6 @@ export default class PetDetails extends Component<PetDetailsProps, PetDetailsSta
         this.setState({weather: weatherType, name: result[0].name, image: result[0].image});
     }
 
-    componentDidUpdate() {
-        console.log(this.state)
-    }
-
     render() {
         return (
             <div>

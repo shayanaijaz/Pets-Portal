@@ -43,7 +43,7 @@ export default class NewPets extends Component<RouteComponentProps, PetState> {
     petTypeChangedHandler = async (selectedOption: any) => {
         this.setState({type: selectedOption.label})
         const list = await getBreed(selectedOption.value);
-        this.setState({breedList: list!})
+        this.setState({breedList: list})
     }
 
     nameChangedHandler = (event: any) => {

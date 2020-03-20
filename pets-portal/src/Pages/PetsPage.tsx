@@ -5,7 +5,6 @@ import Table from 'react-bootstrap/Table';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import { RouteComponentProps } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
 
 interface PetState {
     pets: [{
@@ -20,7 +19,7 @@ interface PetState {
 
 
 
-class PetsPage extends Component<RouteComponentProps, PetState> {
+export default class PetsPage extends Component<RouteComponentProps, PetState> {
     constructor(props: RouteComponentProps) {
         super(props);
         this.state = {
@@ -38,11 +37,6 @@ class PetsPage extends Component<RouteComponentProps, PetState> {
         const result = await getPetData();
         this.setState({pets: result});
     }
-
-    componentDidUpdate() {
-        console.log(this.state);
-    }
-
 
     renderTableData() {
         return this.state.pets.map((pet) => {
@@ -86,5 +80,3 @@ class PetsPage extends Component<RouteComponentProps, PetState> {
         )
     }
 }
-
-export default withRouter(PetsPage);

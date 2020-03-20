@@ -7,7 +7,7 @@ export const getBreed = async (type: string) => {
 
     try {
 
-        response = await axios.get('https://pets-api.herokuapp.com/petsBreed', {
+        response = await axios.get('/petsBreed', {
             params: {
                 type: type
             }
@@ -41,11 +41,8 @@ export const postPetData = async (params: {name: string, type: string, breed: st
     formData.append("longitude", params.longitude.toString());
     formData.append("attachment", params.image);
 
-    let response: any = [];
-
     try {
-        response = await axios.post("https://pets-api.herokuapp.com/pets", formData);
-        console.log(response)
+        await axios.post("/pets", formData);
     } catch (err) {
         console.log(err)
     }
@@ -57,10 +54,7 @@ export const getPetData = async () => {
     let response: any = [];
 
     try {
-        response = await axios.get("https://pets-api.herokuapp.com/pets");
-        
-        console.log(response.data)
-
+        response = await axios.get("/pets");
         return response.data;
     } catch (err) {
         console.log(err)
@@ -71,8 +65,7 @@ export const getPetDataByID = async (ID: number) => {
     let response: any = [];
 
     try {
-        response = await axios.get(`https://pets-api.herokuapp.com/pets/${ID}`);
-        console.log(response.data)
+        response = await axios.get(`/pets/${ID}`);
         return response.data
     } catch (err) {
         console.log(err)

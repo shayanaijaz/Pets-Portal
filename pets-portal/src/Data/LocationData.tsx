@@ -4,7 +4,7 @@ export const getLocationCoordinates = async(location: string) => {
 
     let response: any = [];
 
-    response = await axios.get('https://pets-api.herokuapp.com/location', {
+    response = await axios.get('/location', {
         params: {
             location: location
         }
@@ -15,7 +15,7 @@ export const getLocationCoordinates = async(location: string) => {
 export const getLocationWeather = async(latitude: number, longitude: number) => {
     let response: any = [];
 
-    response = await axios.get('https://pets-api.herokuapp.com/locationWeather', {
+    response = await axios.get('/locationWeather', {
         params: {
             lat: latitude,
             lng: longitude

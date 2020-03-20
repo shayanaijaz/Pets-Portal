@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import {getPetData} from '../Data/PetData';
 import {Link} from 'react-router-dom';
+import Table from 'react-bootstrap/Table';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Button from 'react-bootstrap/Button';
+import { RouteComponentProps } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 interface PetState {
     pets: [{
@@ -13,8 +18,10 @@ interface PetState {
     
 }
 
-export default class PetsPage extends Component<{}, PetState> {
-    constructor(props: {}) {
+
+
+class PetsPage extends Component<RouteComponentProps, PetState> {
+    constructor(props: RouteComponentProps) {
         super(props);
         this.state = {
             pets: [{
@@ -36,12 +43,12 @@ export default class PetsPage extends Component<{}, PetState> {
         console.log(this.state);
     }
 
+
     renderTableData() {
         return this.state.pets.map((pet) => {
             const {ID, name, type, breed} = pet;
             return (
                 <tr key={ID}>
-                <td>{ID}</td>
                 <td>{name}</td>
                 <td>{type}</td>
                 <td>{breed}</td>
@@ -51,13 +58,33 @@ export default class PetsPage extends Component<{}, PetState> {
         })
     }
 
+    buttonClickedHandler = (event: any) => {
+        this.props.history.push("/pets/new");
+    }
+
     render() {
         return (
-            <table>
-                <tbody>
-                    {this.renderTableData()}
-                </tbody>
-            </table>
+            <div>
+                <Jumbotron className="jumbotron">
+                    <h1>does your pet need an Umbrella?</h1>
+                </Jumbotron>
+                <Table striped borderless>
+                    <tbody>
+                        <tr>
+                            <th>NAME</th>
+                            <th>TYPE</th>
+                            <th>BREED</th>
+                            <th>DETAILS</th>
+                        </tr>
+                        {this.renderTableData()}
+                    </tbody>
+                </Table>
+                <div className="tableDiv">
+                    <Button className="formButton" onClick={this.buttonClickedHandler}>Add New Pet</Button>
+                </div>
+            </div>
         )
     }
 }
+
+export default withRouter(PetsPage);

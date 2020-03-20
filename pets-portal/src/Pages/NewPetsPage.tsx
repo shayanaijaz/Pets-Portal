@@ -2,10 +2,12 @@ import React, {Component} from "react";
 import {getBreed, postPetData} from '../Data/PetData';
 import {getLocationCoordinates} from '../Data/LocationData';
 import Select from 'react-select';
+import Form from 'react-bootstrap/Form';
+import {Row, Col} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import { RouteComponentProps } from 'react-router-dom';
 
-type PetProps = {
-
-}
 
 interface PetState {
     name: string,
@@ -18,11 +20,12 @@ interface PetState {
     location: string,
     latitude: number, 
     longitude: number,
-    image: File
+    image: File, 
+    errorMessage: string
 }
 
-export default class NewPets extends Component<PetProps, PetState> {
-    constructor(props: PetProps){
+export default class NewPets extends Component<RouteComponentProps, PetState> {
+    constructor(props: RouteComponentProps){
         super(props);
         this.state = {
             name: null,
@@ -32,13 +35,14 @@ export default class NewPets extends Component<PetProps, PetState> {
             location: null,
             latitude: null,
             longitude: null,
-            image: null
+            image: null, 
+            errorMessage: null
         }
     }
 
-    petTypeSelectedHandler = async (event: any) => {
-        this.setState({type: event.target.value})
-        const list = await getBreed(event.target.value);
+    petTypeChangedHandler = async (selectedOption: any) => {
+        this.setState({type: selectedOption.label})
+        const list = await getBreed(selectedOption.value);
         this.setState({breedList: list!})
     }
 
@@ -61,49 +65,87 @@ export default class NewPets extends Component<PetProps, PetState> {
         this.setState({image: event.target.files[0]})
     }
 
-    handleSubmit = (event: any) => {
-        postPetData(this.state)
-        event.preventDefault()
+    handleSubmit = async (event: any) => {
+
+        if (this.state.name == null || this.state.type == null || this.state.breed == null || this.state.image == null || this.state.location == null) {
+            this.setState({errorMessage: "Missing required values"})
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            event.preventDefault();
+            await postPetData(this.state)
+            this.props.history.push("/pets");
+        }  
     }
 
     render() {
+        
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label> Name: </label>
-                <input type="text" name="name" onChange={this.nameChangedHandler}></input>
+            <div>
+            <Jumbotron className="jumbotron">
+                <h1>add your pet</h1>
+            </Jumbotron>
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Group as={Row}>
+                    <Form.Label column sm={2}>Name</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control type="text" name="name" onChange={this.nameChangedHandler}></Form.Control>
+                    </Col>
+                </Form.Group>
 
-                <br></br>
+                <Form.Group as={Row}>
+                    <Form.Label column sm={2}>Type</Form.Label>
+                    <Col sm={10}>
+                        <Select options={[{value:'dog', label:'Dog'}, {value:'cat', label:'Cat'}]} onChange={this.petTypeChangedHandler}/>
+                    </Col>
+                </Form.Group>
 
-                <label>Type: </label>
-                <select name="type" defaultValue="empty" onChange={this.petTypeSelectedHandler}>
-                    <option value = "empty" disabled>Choose a pet</option>
-                    <option value = "dog">Dog</option>
-                    <option value = "cat">Cat</option>
-                </select>
+                <Form.Group as={Row}>
+                    <Form.Label column sm={2}>Breed</Form.Label>
+                    <Col sm={10}>
+                        <Select options={this.state.breedList} onChange={this.breedChangedHandler}/>
+                    </Col>
+                </Form.Group>
 
-                <br></br>
+                <Form.Group as={Row}>
+                    <Form.Label column sm={2}>Location</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control type="text" name="location" onBlur={this.locationChangedHandler}></Form.Control>
+                    </Col>
+                </Form.Group>
 
-                <label>Breed: </label>
-                <Select options={this.state.breedList} onChange={this.breedChangedHandler}/>
+                <Form.Group as={Row}>
+                <Form.Label column sm={2}>Latitude</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control type="text" name="latitude" value={this.state.latitude?.toString() || ''} disabled ></Form.Control>
+                    </Col>
+                </Form.Group>
 
-                <label>Location: </label>
-                <input type="text" name="location" onBlur={this.locationChangedHandler}></input>
+                <Form.Group as={Row}>
+                <Form.Label column sm={2}>Longitude</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control type="text" name="longitude" value={this.state.longitude?.toString() || ''} disabled ></Form.Control>
+                    </Col>
+                </Form.Group>
 
-                <label>Latitude: </label>
-                <input type="text" name="latitude" value={this.state.latitude?.toString() || ''} disabled ></input>
+                <Form.Group as={Row}>
+                    <Form.Label column sm={2}>Image</Form.Label>
+                    <Col sm={10}>
+                        <Form.Control type="file" onChange={this.fileSelectedHandler} />
+                    </Col>
+                </Form.Group>
 
-                <label>Longitude: </label>
-                <input type="text" name="longitude" value={this.state.longitude?.toString() || ''} disabled ></input>
+                <Form.Group as={Row} className="errorLabel">
+                    <Form.Label>{this.state.errorMessage}</Form.Label>
+                </Form.Group>
+                <Form.Group as={Row} className="formButton">
+                    <Col sm={12}>
+                        <Button type="submit">Submit</Button>
+                    </Col>
+                </Form.Group>
+            </Form>
+            </div>
 
-                <br></br>
-
-                <label>Select an image: </label>
-                <input type="file" onChange={this.fileSelectedHandler} />
-
-                <input type="submit" value="Submit" />
-            </form>
         )
     }
-
-
 }

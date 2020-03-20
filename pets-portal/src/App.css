@@ -36,3 +36,69 @@
     transform: rotate(360deg);
   }
 }
+
+form
+{
+    display: block;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1
+{
+  text-align: center;
+}
+
+.jumbotron
+{
+  background-color: #61dafb !important;
+  text-align: center;
+}
+
+.btn-primary 
+{
+  background-color: #61dafb !important;
+  border-color: #61dafb !important;
+  color: black !important;
+  width: 200px;
+  padding-bottom: 5%;
+}
+
+.formButton
+{
+  text-align: center !important;
+}
+
+.table 
+{
+  width: 75% !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tableDiv
+{
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+p
+{
+  padding-top: 2%;
+  font-size: larger;
+  font-weight: 500;
+}
+
+.imageDiv
+{
+  width: 25%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.errorLabel
+{
+  color: red;
+}

@@ -1,10 +1,5 @@
 import axios from 'axios';
-import { format } from 'util';
 
-interface breedList {
-    value: String, 
-    label: String
-}
 
 export const getBreed = async (type: string) => {
 
@@ -23,7 +18,6 @@ export const getBreed = async (type: string) => {
             label: String | null
         }] = [{value: null, label: null}]
 
-        // let breeds: breedList[] = [];
         response.data.forEach(function(item: any) {
             breeds.push({value: item.name, label: item.name});
         })
